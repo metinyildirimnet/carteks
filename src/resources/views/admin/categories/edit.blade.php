@@ -11,7 +11,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form id="category-form" action="{{ route('admin.categories.update', $category->id) }}" method="POST">
+            <form id="category-form" action="{{ route('admin.products.categories.update', $category->id) }}" method="POST">
                 @csrf
                 @method('PUT') {{-- Laravel'de PUT/PATCH metotları için --}}
                 <div class="card-body">

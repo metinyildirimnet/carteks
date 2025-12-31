@@ -22,7 +22,7 @@
                         role="tabpanel" aria-labelledby="tab-{{ $group->key }}">
 
                         {{-- Group Title Edit Form --}}
-                        <form action="{{ route('admin.menus.group.update', $group) }}" method="POST" class="form-inline mb-4">
+                        <form action="{{ route('admin.design.menus.group.update', $group) }}" method="POST" class="form-inline mb-4">
                             @csrf
                             @method('PUT')
                             <div class="form-group">
@@ -66,7 +66,7 @@
                                     </span>
                                     <div>
                                         <button class="btn btn-xs btn-warning edit-item-btn">Düzenle</button>
-                                        <form action="{{ route('admin.menus.item.destroy', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu linki silmek istediğinizden emin misiniz?');">
+                                        <form action="{{ route('admin.design.menus.item.destroy', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu linki silmek istediğinizden emin misiniz?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-xs btn-danger">Sil</button>
@@ -188,7 +188,7 @@
                     onEnd: function(evt) {
                         const order = Array.from(evt.target.children).map(el => el.dataset.id);
                         
-                        fetch('{{ route('admin.menus.reorder') }}', {
+                        fetch('{{ route('admin.design.menus.reorder') }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -245,7 +245,7 @@
             // Open modal for ADDING a new item
             $('.add-item-btn').on('click', function() {
                 const groupId = $(this).data('group-id');
-                const action = '{{ url('admin/menus/groups') }}/' + groupId + '/items';
+                const action = '{{ url('admin/design/menus/groups') }}/' + groupId + '/items';
                 
                 form.attr('action', action);
                 form.trigger('reset'); // Clear form fields
@@ -260,7 +260,7 @@
             $('.edit-item-btn').on('click', function() {
                 const listItem = $(this).closest('li');
                 const itemId = listItem.data('id');
-                const action = '{{ url('admin/menus/items') }}/' + itemId;
+                const action = '{{ url('admin/design/menus/items') }}/' + itemId;
 
                 form.attr('action', action);
                 form.trigger('reset');

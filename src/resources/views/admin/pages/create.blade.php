@@ -9,7 +9,7 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form action="{{ route('admin.pages.store') }}" method="POST">
+        <form action="{{ route('admin.design.pages.store') }}" method="POST">
             @include('admin.pages._form')
         </form>
     </div>

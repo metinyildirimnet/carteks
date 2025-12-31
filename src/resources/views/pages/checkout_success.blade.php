@@ -25,6 +25,31 @@
                         Dön</a>
                 </div>
 
+                @if ($order && $order->payment_method === 'bank_transfer' && \App\Models\Module::isActive('bank_transfer'))
+                    @php
+                        $bankAccounts = \App\Models\Module::getSettings('bank_transfer', 'accounts', []);
+                    @endphp
+                    @if (!empty($bankAccounts))
+                    <div class="card" style="margin-top: 30px; padding: 20px; border-radius: 8px; border: 2px solid #007bff;">
+                        <h2 style="font-size: 22px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
+                            Banka Hesap Bilgileri
+                        </h2>
+                        <p>Lütfen aşağıdaki banka hesabına <strong>{{ number_format($order->total_amount, 2) }} ₺</strong> tutarındaki sipariş ödemenizi gerçekleştirin. Ödemeniz onaylandıktan sonra siparişiniz kargoya verilecektir.</p>
+
+                        @foreach($bankAccounts as $account)
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd;">
+                            <p style="margin: 5px 0;"><strong>Banka Adı:</strong> {{ $account['bank_name'] }}</p>
+                            <p style="margin: 5px 0;"><strong>Hesap Sahibi:</strong> {{ $account['account_holder'] }}</p>
+                            <p style="margin: 5px 0;"><strong>IBAN:</strong> {{ $account['iban'] }}</p>
+                            @if(!empty($account['description']))
+                            <p class="text-muted" style="margin: 5px 0;"><strong>Açıklama:</strong> {{ $account['description'] }}</p>
+                            @endif
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+                @endif
+
                 <div class="card" style="margin-top: 30px; padding: 20px; border-radius: 8px;">
                     <h2 style="font-size: 22px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
                         Sipariş Özeti</h2>

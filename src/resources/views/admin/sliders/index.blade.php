@@ -7,7 +7,7 @@
         <div class="card-header">
             <h3 class="card-title">Tüm Slaytlar</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.sliders.create') }}" class="btn btn-primary">
+                <a href="{{ route('admin.design.sliders.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Yeni Slayt Ekle
                 </a>
             </div>
@@ -29,8 +29,8 @@
                             </span>
                         </div>
                         <div>
-                            <a href="{{ route('admin.sliders.edit', $slide) }}" class="btn btn-sm btn-warning">Düzenle</a>
-                            <form action="{{ route('admin.sliders.destroy', $slide) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu slaytı silmek istediğinizden emin misiniz?');">
+                            <a href="{{ route('admin.design.sliders.edit', $slide) }}" class="btn btn-sm btn-warning">Düzenle</a>
+                            <form action="{{ route('admin.design.sliders.destroy', $slide) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu slaytı silmek istediğinizden emin misiniz?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Sil</button>
@@ -57,7 +57,7 @@
                     onEnd: function(evt) {
                         const order = Array.from(evt.target.children).map(el => el.dataset.id);
                         
-                        fetch('{{ route('admin.sliders.reorder') }}', {
+                        fetch('{{ route('admin.design.sliders.reorder') }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

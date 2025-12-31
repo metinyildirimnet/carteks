@@ -103,67 +103,138 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.orders.index') }}"
+
+                        <li class="nav-item {{ request()->routeIs('admin.orders.*') ? 'menu-open' : '' }}">
+                            <a href="#"
                                 class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-shopping-cart"></i>
-                                <p>Siparişler</p>
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Sipariş Yönetimi
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.orders.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.orders.index') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tüm Siparişler</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="./index2.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Yeni Siparişler</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="./index3.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tamamlanmayanlar</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.products.index') }}"
+
+
+
+                        <!-- Ürün Yönetimi -->
+                        <li class="nav-item {{ request()->routeIs('admin.products.*') ? 'menu-open' : '' }}">
+                            <a href="#"
                                 class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-box"></i>
-                                <p>Ürünler</p>
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Ürün Yönetimi
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.products.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.products.index') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Ürünler</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.products.packages.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.products.packages.index') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Paketler</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.products.categories.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.products.categories.*') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Kategoriler</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.packages.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.packages.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-boxes"></i>
-                                <p>Paketler</p>
+                        <!-- Ürün Yönetimi -->
+
+
+                        <!-- Tasarım Yönetimi -->
+                        <li class="nav-item {{ request()->routeIs('admin.design.*') ? 'menu-open' : '' }}">
+                            <a href="#"
+                                class="nav-link {{ request()->routeIs('admin.design.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Tasarım
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.design.pages.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.design.pages.index') ? 'active' : '' }}">
+                                        <i class="far fa-file-alt nav-icon"></i>
+                                        <p>Sayfalar</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.design.menus.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.design.menus.index') ? 'active' : '' }}">
+                                        <i class="far fa-hamburger nav-icon"></i>
+                                        <p>Alt Menü</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.design.sliders.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.design.sliders.index') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-images"></i>
+                                        <p>Slider Yönetimi</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.design.homepage-blocks.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.design.homepage-blocks.*') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-th-large"></i>
+                                        <p>Ana Sayfa Blokları</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.design.marquee-items.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.design.marquee-items.*') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-text-width"></i>
+                                        <p>Kayan Yazı Yönetimi</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
+                        <!-- Tasarım Yönetimi -->
+
+
+
                         <li class="nav-item">
-                            <a href="{{ route('admin.categories.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-list"></i>
-                                <p>Kategoriler</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.pages.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-alt"></i>
-                                <p>Sayfalar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.menus.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-stream"></i>
-                                <p>Menü Yönetimi</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.sliders.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-images"></i>
-                                <p>Slider Yönetimi</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.homepage-blocks.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.homepage-blocks.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-th-large"></i>
-                                <p>Ana Sayfa Blokları</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.marquee-items.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.marquee-items.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-text-width"></i>
-                                <p>Kayan Yazı Yönetimi</p>
+                            <a href="{{ route('admin.modules.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.modules.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-puzzle-piece"></i>
+                                <p>Modül Yönetimi</p>
                             </a>
                         </li>
                         <li class="nav-item">

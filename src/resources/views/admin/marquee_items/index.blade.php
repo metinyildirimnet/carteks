@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Kayan Yazı Listesi</h3>
                     <div class="card-tools">
-                        <a href="{{ route('admin.marquee-items.create') }}" class="btn btn-success btn-sm">Yeni Kayan Yazı Ekle</a>
+                        <a href="{{ route('admin.design.marquee-items.create') }}" class="btn btn-success btn-sm">Yeni Kayan Yazı Ekle</a>
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -38,8 +38,8 @@
                                     </td>
                                     <td>{{ $marqueeItem->sort_order ?? '-' }}</td>
                                     <td>
-                                        <a href="{{ route('admin.marquee-items.edit', $marqueeItem->id) }}" class="btn btn-sm btn-primary">Düzenle</a>
-                                        <form action="{{ route('admin.marquee-items.destroy', $marqueeItem->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bu kayan yazı öğesini silmek istediğinizden emin misiniz?');">
+                                        <a href="{{ route('admin.design.marquee-items.edit', $marqueeItem->id) }}" class="btn btn-sm btn-primary">Düzenle</a>
+                                        <form action="{{ route('admin.design.marquee-items.destroy', $marqueeItem->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bu kayan yazı öğesini silmek istediğinizden emin misiniz?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Sil</button>

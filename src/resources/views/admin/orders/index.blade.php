@@ -3,6 +3,81 @@
 @section('title', 'Siparişler')
 
 @section('content')
+    <!-- Filter Section -->
+    <div class="card card-outline card-info">
+        <div class="card-header">
+            <h3 class="card-title">Filtrele</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form id="filter-form" class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input type="text" name="order_code" class="form-control" placeholder="Sipariş Kodu">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input type="text" name="customer_name" class="form-control" placeholder="Müşteri Adı">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input type="text" name="customer_phone" class="form-control" placeholder="Müşteri Telefon">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <select name="product_id" class="form-control">
+                                <option value="">Tüm Ürünler</option>
+                                @foreach($products as $product)
+                                    <option value="{{ $product->id }}">{{ $product->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                             <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                  </span>
+                                </div>
+                                <input type="text" name="start_date" class="form-control" placeholder="Başlangıç Tarihi" onfocus="(this.type='date')">
+                              </div>
+                        </div>
+                    </div>
+                     <div class="col-md-4">
+                        <div class="form-group">
+                             <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                  </span>
+                                </div>
+                                <input type="text" name="end_date" class="form-control" placeholder="Bitiş Tarihi" onfocus="(this.type='date')">
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-primary">Filtrele</button>
+                        <button type="button" id="clear-filters-btn" class="btn btn-secondary">Temizle</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -30,29 +105,18 @@
                         <thead>
                             <tr>
                                 <th style="width: 10px;"><input type="checkbox" id="check-all"></th>
-                                <th style="width: 10px">ID</th>
                                 <th>Sipariş Kodu</th>
-                                <th>Kullanıcı</th>
+                                <th>Müşteri</th>
+                                <th>Ürünler</th>
                                 <th>Toplam Tutar</th>
                                 <th>Durum</th>
                                 <th>Tarih</th>
                                 <th style="width: 100px">İşlemler</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="orders-table-body">
                             @forelse ($orders as $order)
-                                <tr data-id="{{ $order->id }}">
-                                    <td><input type="checkbox" class="row-checkbox" value="{{ $order->id }}"></td>
-                                    <td>{{ $order->id }}</td>
-                                    <td>{{ $order->order_code }}</td>
-                                    <td>{{ $order->user->name ?? 'Misafir' }}</td>
-                                    <td>{{ number_format($order->total_amount, 2) }} ₺</td>
-                                    <td><span class="badge" style="background-color: {{ $order->status->color }}; color: #fff;">{{ $order->status->name }}</span></td>
-                                    <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
-                                    <td>
-                                        <a href="{{ route('admin.orders.show', $order->order_code) }}" class="btn btn-sm btn-info">Detay</a>
-                                    </td>
-                                </tr>
+                                @include('admin.orders._order_row', ['order' => $order])
                             @empty
                                 <tr>
                                     <td colspan="8" class="text-center">Henüz sipariş bulunmuyor.</td>
@@ -99,42 +163,43 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Common variables
+    // =================================================
+    // Common Variables & Functions
+    // =================================================
     const checkAll = $('#check-all');
-    const rowCheckboxes = $('.row-checkbox');
+    const tableBody = $('#orders-table-body');
     const bulkActionsBtn = $('#bulk-actions-btn');
     const bulkActionsDropdown = $('#bulk-actions-dropdown');
-    const csrfToken = '{{ csrf_token() }}'; // Store token
+    const csrfToken = '{{ csrf_token() }}';
 
-    // Function to control button state
     function updateBulkActionsState() {
-        const anyChecked = rowCheckboxes.is(':checked');
+        const anyChecked = tableBody.find('.row-checkbox:checked').length > 0;
         bulkActionsBtn.prop('disabled', !anyChecked);
         bulkActionsDropdown.prop('disabled', !anyChecked);
     }
 
-    // Event handler for "select all"
-    checkAll.on('change', function() {
-        rowCheckboxes.prop('checked', this.checked);
+    // =================================================
+    // Event Handlers
+    // =================================================
+
+    // --- Checkbox Logic (with event delegation) ---
+    tableBody.on('change', '.row-checkbox', function() {
+        const totalCheckboxes = tableBody.find('.row-checkbox').length;
+        const checkedCheckboxes = tableBody.find('.row-checkbox:checked').length;
+        checkAll.prop('checked', totalCheckboxes > 0 && totalCheckboxes === checkedCheckboxes);
         updateBulkActionsState();
     });
 
-    // Event handler for individual checkboxes
-    rowCheckboxes.on('change', function() {
-        if (rowCheckboxes.filter(':checked').length === rowCheckboxes.length) {
-            checkAll.prop('checked', true);
-        } else {
-            checkAll.prop('checked', false);
-        }
+    checkAll.on('change', function() {
+        tableBody.find('.row-checkbox').prop('checked', this.checked);
         updateBulkActionsState();
     });
 
     // --- Bulk Action Logic ---
-
     // 1. Bulk Delete
     $('#bulk-delete-action').on('click', function(e) {
         e.preventDefault();
-        const selectedIds = rowCheckboxes.filter(':checked').map(function() { return $(this).val(); }).get();
+        const selectedIds = tableBody.find('.row-checkbox:checked').map(function() { return $(this).val(); }).get();
 
         if (selectedIds.length === 0) {
             toastr.warning('Lütfen en az bir sipariş seçin.');
@@ -149,7 +214,7 @@ $(document).ready(function() {
                 headers: { 'X-CSRF-TOKEN': csrfToken },
                 success: function(response) {
                     toastr.success(response.message);
-                    location.reload();
+                    $('#filter-form').trigger('submit'); // Refilter/reload table data
                 },
                 error: function(xhr) {
                     const errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Bir hata oluştu.';
@@ -163,7 +228,7 @@ $(document).ready(function() {
     const updateStatusModal = $('#updateStatusModal');
     $('#bulk-update-status-action').on('click', function(e) {
         e.preventDefault();
-        if (rowCheckboxes.filter(':checked').length === 0) {
+        if (tableBody.find('.row-checkbox:checked').length === 0) {
             toastr.warning('Lütfen en az bir sipariş seçin.');
             return;
         }
@@ -171,13 +236,8 @@ $(document).ready(function() {
     });
 
     $('#save-status-update').on('click', function() {
-        const selectedIds = rowCheckboxes.filter(':checked').map(function() { return $(this).val(); }).get();
+        const selectedIds = tableBody.find('.row-checkbox:checked').map(function() { return $(this).val(); }).get();
         const newStatusId = $('#bulk_order_status_id').val();
-
-        if (selectedIds.length === 0) {
-            toastr.warning('Hata: Seçili sipariş bulunamadı.'); // This should ideally not happen
-            return;
-        }
 
         $.ajax({
             url: '{{ route("admin.orders.bulk-update-status") }}',
@@ -190,7 +250,18 @@ $(document).ready(function() {
             success: function(response) {
                 updateStatusModal.modal('hide');
                 toastr.success(response.message);
-                location.reload();
+                 if (response.newStatus) {
+                    selectedIds.forEach(function(id) {
+                        const row = $('tr[data-id="' + id + '"]');
+                        const statusBadge = row.find('td:nth-child(6) .badge');
+                        if (statusBadge.length) {
+                            statusBadge.css('background-color', response.newStatus.color).text(response.newStatus.name);
+                        }
+                    });
+                }
+                tableBody.find('.row-checkbox').prop('checked', false);
+                checkAll.prop('checked', false);
+                updateBulkActionsState();
             },
             error: function(xhr) {
                 updateStatusModal.modal('hide');
@@ -200,7 +271,38 @@ $(document).ready(function() {
         });
     });
 
-    // Initial state check on page load
+    // --- AJAX Filtering Logic ---
+    const filterForm = $('#filter-form');
+    const clearFiltersBtn = $('#clear-filters-btn');
+
+    filterForm.on('submit', function(e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+
+        $.ajax({
+            url: '{{ route("admin.orders.index") }}',
+            type: 'GET',
+            data: formData,
+            beforeSend: function() {
+                tableBody.html('<tr><td colspan="8" class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td></tr>');
+            },
+            success: function(response) {
+                tableBody.html(response.html);
+                checkAll.prop('checked', false);
+                updateBulkActionsState();
+            },
+            error: function() {
+                tableBody.html('<tr><td colspan="8" class="text-center">Filtreleme sırasında bir hata oluştu.</td></tr>');
+            }
+        });
+    });
+
+    clearFiltersBtn.on('click', function() {
+        filterForm[0].reset();
+        filterForm.trigger('submit');
+    });
+
+    // Initial state check
     updateBulkActionsState();
 });
 </script>

@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h3 class="card-title">Yeni Ana Sayfa Bloğu Ekle</h3>
             </div>
-            <form action="{{ route('admin.homepage-blocks.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.design.homepage-blocks.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @include('admin.homepage_blocks._form')
             </form>

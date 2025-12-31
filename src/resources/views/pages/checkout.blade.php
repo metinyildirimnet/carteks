@@ -270,6 +270,7 @@
                                 Kapıda Ödeme (Kredi Kartı)
                             </label>
                         </div>
+                        @if (\App\Models\Module::isActive('bank_transfer'))
                         <div class="payment-method-option">
                             <input class="form-check-input" type="radio" name="payment_method" id="bank_transfer"
                                 value="bank_transfer">
@@ -288,6 +289,7 @@
                                 @endif
                             </label>
                         </div>
+                        @endif
                         <div class="payment-method-option">
                             <input class="form-check-input" type="radio" name="payment_method" id="credit_card"
                                 value="credit_card" disabled>

@@ -7,7 +7,7 @@
         <div class="card-header">
             <h3 class="card-title">Tüm Sayfalar</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.pages.create') }}" class="btn btn-primary">
+                <a href="{{ route('admin.design.pages.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Yeni Sayfa Ekle
                 </a>
             </div>
@@ -38,8 +38,8 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('admin.pages.edit', $page) }}" class="btn btn-sm btn-warning">Düzenle</a>
-                            <form action="{{ route('admin.pages.destroy', $page) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu sayfayı silmek istediğinizden emin misiniz?');">
+                            <a href="{{ route('admin.design.pages.edit', $page) }}" class="btn btn-sm btn-warning">Düzenle</a>
+                            <form action="{{ route('admin.design.pages.destroy', $page) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu sayfayı silmek istediğinizden emin misiniz?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Sil</button>

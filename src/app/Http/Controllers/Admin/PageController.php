@@ -35,7 +35,7 @@ class PageController extends Controller
             'is_published' => $request->input('is_published', false),
         ]);
 
-        return redirect()->route('admin.pages.index')->with('success', 'Sayfa başarıyla oluşturuldu.');
+        return redirect()->route('admin.design.pages.index')->with('success', 'Sayfa başarıyla oluşturuldu.');
     }
 
     public function edit(Page $page)
@@ -58,7 +58,7 @@ class PageController extends Controller
             'is_published' => $request->input('is_published', false),
         ]);
 
-        return redirect()->route('admin.pages.index')->with('success', 'Sayfa başarıyla güncellendi.');
+        return redirect()->route('admin.design.pages.index')->with('success', 'Sayfa başarıyla güncellendi.');
     }
 
     public function destroy(Page $page)

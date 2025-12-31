@@ -118,7 +118,7 @@
 
 <div class="card-footer">
     <button type="submit" class="btn btn-primary">Kaydet</button>
-    <a href="{{ route('admin.sliders.index') }}" class="btn btn-secondary">İptal</a>
+    <a href="{{ route('admin.design.sliders.index') }}" class="btn btn-secondary">İptal</a>
 </div>
 
 @push('scripts')

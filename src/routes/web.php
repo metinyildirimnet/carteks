@@ -6,8 +6,9 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HomepageBlockController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\MarqueeItemController; // Added
+use App\Http\Controllers\Admin\MarqueeItemController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\ModuleController; // Add this
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\BlockController;
@@ -73,15 +74,45 @@ Route::get('/admin', function () {
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
-    Route::get('packages', [ProductController::class, 'packageIndex'])->name('packages.index');
+
+    Route::resource('modules', ModuleController::class)->only(['index', 'edit', 'update']);
+
     Route::get('products/trashed', [ProductController::class, 'trashed'])->name('products.trashed');
     Route::post('products/{id}/restore', [ProductController::class, 'restore'])->name('products.restore');
     Route::delete('products/{id}/force-delete', [ProductController::class, 'forceDelete'])->name('products.force-delete');
     Route::resource('products', ProductController::class)->except(['show']); // show is handled by public routes
-    Route::resource('categories', CategoryController::class);
-    Route::resource('homepage-blocks', HomepageBlockController::class);
-    Route::post('homepage-blocks/reorder', [HomepageBlockController::class, 'reorder'])->name('homepage-blocks.reorder');
-    Route::post('homepage-blocks/{homepageBlock}/reorder-products', [HomepageBlockController::class, 'reorderProducts'])->name('homepage-blocks.reorderProducts');
+
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get('packages', [ProductController::class, 'packageIndex'])->name('packages.index');
+        Route::resource('categories', CategoryController::class);
+    });
+
+    Route::prefix('design')->name('design.')->group(function () {
+        // Homepage Blocks
+        Route::post('homepage-blocks/reorder', [HomepageBlockController::class, 'reorder'])->name('homepage-blocks.reorder');
+        Route::post('homepage-blocks/{homepageBlock}/reorder-products', [HomepageBlockController::class, 'reorderProducts'])->name('homepage-blocks.reorderProducts');
+        Route::resource('homepage-blocks', HomepageBlockController::class);
+
+        // Marquee Items
+        Route::resource('marquee-items', MarqueeItemController::class);
+
+        // Menu Management
+        Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
+        Route::put('menus/groups/{menuGroup}', [MenuController::class, 'updateGroup'])->name('menus.group.update');
+        Route::post('menus/groups/{menuGroup}/items', [MenuController::class, 'storeItem'])->name('menus.item.store');
+        Route::put('menus/items/{menuItem}', [MenuController::class, 'updateItem'])->name('menus.item.update');
+        Route::delete('menus/items/{menuItem}', [MenuController::class, 'destroyItem'])->name('menus.item.destroy');
+        Route::post('menus/reorder', [MenuController::class, 'reorder'])->name('menus.reorder');
+
+        // Slider Management
+        Route::post('sliders/reorder', [SliderController::class, 'reorder'])->name('sliders.reorder');
+        Route::resource('sliders', SliderController::class)->except(['show']);
+
+        // Page Management - Moved here to avoid conflict with design group if named 'pages'
+        Route::resource('pages', AdminPageController::class);
+    });
+
+
     Route::post('orders/bulk-delete', [OrderController::class, 'bulkDelete'])->name('orders.bulk-delete');
     Route::post('orders/bulk-update-status', [OrderController::class, 'bulkUpdateStatus'])->name('orders.bulk-update-status');
     Route::get('orders/trashed', [OrderController::class, 'trashed'])->name('orders.trashed');
@@ -90,20 +121,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('orders', OrderController::class)->except(['create', 'store']);
     Route::resource('order-statuses', \App\Http\Controllers\Admin\OrderStatusController::class);
     Route::resource('product-reviews', \App\Http\Controllers\Admin\ProductReviewController::class);
-    Route::resource('marquee-items', MarqueeItemController::class); // Added
-    Route::resource('pages', AdminPageController::class);
-
-    // Menu Management Routes
-    Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
-    Route::put('menus/groups/{menuGroup}', [MenuController::class, 'updateGroup'])->name('menus.group.update');
-    Route::post('menus/groups/{menuGroup}/items', [MenuController::class, 'storeItem'])->name('menus.item.store');
-    Route::put('menus/items/{menuItem}', [MenuController::class, 'updateItem'])->name('menus.item.update');
-    Route::delete('menus/items/{menuItem}', [MenuController::class, 'destroyItem'])->name('menus.item.destroy');
-    Route::post('menus/reorder', [MenuController::class, 'reorder'])->name('menus.reorder');
-
-    // Slider Management Routes
-    Route::post('sliders/reorder', [SliderController::class, 'reorder'])->name('sliders.reorder');
-    Route::resource('sliders', SliderController::class)->except(['show']);
 });
 
 // Authentication Routes (Manual Breeze-like setup)

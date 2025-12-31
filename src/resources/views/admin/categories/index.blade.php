@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Kategori Listesi</h3>
                     <div class="card-tools">
-                        <a href="{{ route('admin.categories.create') }}" class="btn btn-success btn-sm">Yeni Kategori Ekle</a>
+                        <a href="{{ route('admin.products.categories.create') }}" class="btn btn-success btn-sm">Yeni Kategori Ekle</a>
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -30,8 +30,8 @@
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->description }}</td>
                                     <td>
-                                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-sm btn-primary">Düzenle</a>
-                                        <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?');">
+                                        <a href="{{ route('admin.products.categories.edit', $category->id) }}" class="btn btn-sm btn-primary">Düzenle</a>
+                                        <form action="{{ route('admin.products.categories.destroy', $category->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Sil</button>

@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Ana Sayfa Blokları Listesi</h3>
                     <div class="card-tools">
-                        <a href="{{ route('admin.homepage-blocks.create') }}" class="btn btn-success btn-sm">Yeni Blok Ekle</a>
+                        <a href="{{ route('admin.design.homepage-blocks.create') }}" class="btn btn-success btn-sm">Yeni Blok Ekle</a>
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -55,8 +55,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.homepage-blocks.edit', $block->id) }}" class="btn btn-sm btn-primary">Düzenle</a>
-                                            <form action="{{ route('admin.homepage-blocks.destroy', $block->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bu bloğu silmek istediğinizden emin misiniz?');">
+                                            <a href="{{ route('admin.design.homepage-blocks.edit', $block->id) }}" class="btn btn-sm btn-primary">Düzenle</a>
+                                            <form action="{{ route('admin.design.homepage-blocks.destroy', $block->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bu bloğu silmek istediğinizden emin misiniz?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">Sil</button>
@@ -103,7 +103,7 @@
                         });
                     });
 
-                    fetch('{{ route('admin.homepage-blocks.reorder') }}', {
+                    fetch('{{ route('admin.design.homepage-blocks.reorder') }}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

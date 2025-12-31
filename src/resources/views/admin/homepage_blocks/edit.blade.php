@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h3 class="card-title">Ana Sayfa Bloğu Düzenle: {{ $homepageBlock->title }}</h3>
             </div>
-            <form action="{{ route('admin.homepage-blocks.update', $homepageBlock->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.design.homepage-blocks.update', $homepageBlock->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 @include('admin.homepage_blocks._form')
@@ -74,7 +74,7 @@
                     reorderStatusDiv.className = 'alert alert-info';
                     reorderStatusDiv.textContent = 'Sıralama güncelleniyor...';
 
-                    fetch("{{ route('admin.homepage-blocks.reorderProducts', $homepageBlock) }}", {
+                    fetch("{{ route('admin.design.homepage-blocks.reorderProducts', $homepageBlock) }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

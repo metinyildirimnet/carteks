@@ -11,7 +11,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form id="marquee-item-form" action="{{ route('admin.marquee-items.update', $marqueeItem->id) }}" method="POST">
+            <form id="marquee-item-form" action="{{ route('admin.design.marquee-items.update', $marqueeItem->id) }}" method="POST">
                 @csrf
                 @method('PUT') {{-- Laravel'de PUT/PATCH metotları için --}}
                 <div class="card-body">
@@ -78,7 +78,7 @@
 
                 if (response.ok) {
                     // Success
-                    window.location.href = "{{ route('admin.marquee-items.index') }}"; // Redirect to list
+                    window.location.href = "{{ route('admin.design.marquee-items.index') }}"; // Redirect to list
                 } else if (response.status === 422) {
                     // Validation errors
                     for (const key in result.errors) {

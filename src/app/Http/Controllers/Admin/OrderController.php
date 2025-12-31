@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderStatus;
+use App\Models\Product; // Import Product model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,11 +15,49 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('user', 'status')->latest()->get();
+        $query = Order::with('user', 'status', 'items.product');
+
+        // Apply filters
+        if ($request->filled('order_code')) {
+            $query->where('order_code', 'like', '%' . $request->order_code . '%');
+        }
+        if ($request->filled('customer_name')) {
+            $query->where('customer_name', 'like', '%' . $request->customer_name . '%');
+        }
+        if ($request->filled('customer_phone')) {
+            $query->where('customer_phone', 'like', '%' . $request->customer_phone . '%');
+        }
+        // Updated product filter to use product_id
+        if ($request->filled('product_id')) {
+            $query->whereHas('items', function ($q) use ($request) {
+                $q->where('product_id', $request->product_id);
+            });
+        }
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        $orders = $query->latest()->get();
+
+        if ($request->ajax()) {
+            $html = '';
+            foreach ($orders as $order) {
+                $html .= view('admin.orders._order_row', compact('order'))->render();
+            }
+            if ($orders->isEmpty()) {
+                $html = '<tr><td colspan="8" class="text-center">Filtreye uygun sipariş bulunamadı.</td></tr>';
+            }
+            return response()->json(['html' => $html]);
+        }
+
         $orderStatuses = OrderStatus::all();
-        return view('admin.orders.index', compact('orders', 'orderStatuses'));
+        $products = Product::orderBy('title')->get(); // Get all products
+        return view('admin.orders.index', compact('orders', 'orderStatuses', 'products'));
     }
 
     /**

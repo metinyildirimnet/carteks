@@ -11,7 +11,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form id="category-form" action="{{ route('admin.categories.store') }}" method="POST">
+            <form id="category-form" action="{{ route('admin.products.categories.store') }}" method="POST">
                 @csrf
                 <div class="card-body">
                     <div id="validation-errors" class="alert alert-danger" style="display: none;">

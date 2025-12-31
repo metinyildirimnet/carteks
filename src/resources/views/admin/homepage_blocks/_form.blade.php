@@ -128,7 +128,7 @@
 
 <div class="card-footer">
     <button type="submit" class="btn btn-primary">Kaydet</button>
-    <a href="{{ route('admin.homepage-blocks.index') }}" class="btn btn-secondary">İptal</a>
+    <a href="{{ route('admin.design.homepage-blocks.index') }}" class="btn btn-secondary">İptal</a>
 </div>
 
 @push('styles')
