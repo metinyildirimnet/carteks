@@ -137,7 +137,7 @@ $(document).ready(function() {
         const selectedIds = rowCheckboxes.filter(':checked').map(function() { return $(this).val(); }).get();
 
         if (selectedIds.length === 0) {
-            alert('Lütfen en az bir sipariş seçin.');
+            toastr.warning('Lütfen en az bir sipariş seçin.');
             return;
         }
 
@@ -148,11 +148,12 @@ $(document).ready(function() {
                 data: { ids: selectedIds },
                 headers: { 'X-CSRF-TOKEN': csrfToken },
                 success: function(response) {
-                    alert(response.message);
+                    toastr.success(response.message);
                     location.reload();
                 },
                 error: function(xhr) {
-                    alert('Bir hata oluştu.');
+                    const errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Bir hata oluştu.';
+                    toastr.error(errorMessage);
                 }
             });
         }
@@ -163,7 +164,7 @@ $(document).ready(function() {
     $('#bulk-update-status-action').on('click', function(e) {
         e.preventDefault();
         if (rowCheckboxes.filter(':checked').length === 0) {
-            alert('Lütfen en az bir sipariş seçin.');
+            toastr.warning('Lütfen en az bir sipariş seçin.');
             return;
         }
         updateStatusModal.modal('show');
@@ -172,6 +173,11 @@ $(document).ready(function() {
     $('#save-status-update').on('click', function() {
         const selectedIds = rowCheckboxes.filter(':checked').map(function() { return $(this).val(); }).get();
         const newStatusId = $('#bulk_order_status_id').val();
+
+        if (selectedIds.length === 0) {
+            toastr.warning('Hata: Seçili sipariş bulunamadı.'); // This should ideally not happen
+            return;
+        }
 
         $.ajax({
             url: '{{ route("admin.orders.bulk-update-status") }}',
@@ -183,12 +189,13 @@ $(document).ready(function() {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             success: function(response) {
                 updateStatusModal.modal('hide');
-                alert(response.message);
+                toastr.success(response.message);
                 location.reload();
             },
             error: function(xhr) {
                 updateStatusModal.modal('hide');
-                alert('Durumlar güncellenirken bir hata oluştu.');
+                const errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Durumlar güncellenirken bir hata oluştu.';
+                toastr.error(errorMessage);
             }
         });
     });

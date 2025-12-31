@@ -126,7 +126,15 @@ class OrderController extends Controller
 
         Order::whereIn('id', $request->ids)->update(['order_status_id' => $request->order_status_id]);
 
-        return response()->json(['message' => 'Seçili siparişlerin durumları başarıyla güncellendi.']);
+        $newStatus = OrderStatus::find($request->order_status_id);
+
+        return response()->json([
+            'message' => 'Seçili siparişlerin durumları başarıyla güncellendi.',
+            'newStatus' => [
+                'name' => $newStatus->name,
+                'color' => $newStatus->color,
+            ]
+        ]);
     }
 
     /**
